@@ -24,7 +24,7 @@ cpan install Akamai::Edgegrid JSON File::Spec File::Path
 
 ## Setup
 1. **Configure .edgerc File**:
-   - Create authentication credentials[https://techdocs.akamai.com/developer/docs/set-up-authentication-credentials]
+   - [Create authentication credentials](https://techdocs.akamai.com/developer/docs/set-up-authentication-credentials)
    - The script requires an `.edgerc` file in your home directory (`$HOME/.edgerc`) with the necessary Akamai API credentials.
    - Ensure the `.edgerc` file has a section `[default]` with the required access information (host, client_secret, client_token, access_token).
    ```
