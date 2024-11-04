@@ -36,7 +36,7 @@ cpan install Akamai::Edgegrid JSON File::Spec File::Path
    ```
 3. **Clone the Repository**:
    ```bash
-   git clone https://github.com/yourusername/akamai-property-fetcher.git
+   git clone https://github.com/kawamurashingo/akamai-property-fetcher.git
    cd akamai-property-fetcher
    ```
 
