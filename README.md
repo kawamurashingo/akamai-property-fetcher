@@ -19,7 +19,7 @@ This Perl script retrieves the active staging and production configurations for 
 You can install necessary modules using CPAN if they are not already installed:
 
 ```bash
-cpan install Akamai::Edgegrid JSON File::Spec File::Path
+cpan install Akamai::Edgegrid JSON File::Spec File::Path LWP::Protocol::https
 ```
 
 ## Setup
