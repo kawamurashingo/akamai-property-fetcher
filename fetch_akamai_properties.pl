@@ -4,6 +4,7 @@ use Akamai::Edgegrid;
 use JSON;
 use File::Spec;
 use File::Path 'make_path';
+use Parallel::ForkManager;
 
 # Initialize the Akamai::Edgegrid agent by reading credentials from the .edgerc file
 my $agent = Akamai::Edgegrid->new(
@@ -13,6 +14,10 @@ my $agent = Akamai::Edgegrid->new(
 
 # Set the base URL for the API
 my $baseurl = "https://" . $agent->{host};
+
+# Set the number of parallel processes
+my $max_processes = 4;  # Adjust this number based on your system's capacity
+my $pm = Parallel::ForkManager->new($max_processes);
 
 # Endpoint to retrieve contract IDs
 my $contracts_endpoint = "$baseurl/papi/v1/contracts";
@@ -40,6 +45,9 @@ foreach my $contract_id (@contract_ids) {
             my $properties = $properties_data->{properties}->{items};
 
             foreach my $property (@$properties) {
+                # Fork a new process for each property
+                $pm->start and next;
+
                 my $property_id = $property->{propertyId};
                 my $property_name = $property->{propertyName};
 
@@ -69,7 +77,7 @@ foreach my $contract_id (@contract_ids) {
                     # If no active version found, skip to the next property
                     unless (defined $staging_version || defined $production_version) {
                         warn "No active version found for property ($property_name) - Skipping\n";
-                        next;
+                        $pm->finish;
                     }
 
                     # Retrieve and save staging version details if an active version is found
@@ -112,6 +120,9 @@ foreach my $contract_id (@contract_ids) {
                 } else {
                     warn "Error retrieving activation information ($property_name): " . $activations_resp->status_line . " - Skipping\n";
                 }
+                
+                # End the child process
+                $pm->finish;
             }
         } elsif ($properties_resp->code == 403 || $properties_resp->code == 404) {
             warn "Error retrieving property list (Contract ID: $contract_id, Group ID: $group_id): " . $properties_resp->status_line . " - Skipping\n";
@@ -120,3 +131,6 @@ foreach my $contract_id (@contract_ids) {
         }
     }
 }
+
+# Wait for all child processes to finish
+$pm->wait_all_children;
