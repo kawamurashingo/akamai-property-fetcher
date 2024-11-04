@@ -55,18 +55,24 @@ foreach my $contract_id (@contract_ids) {
                 if ($activations_resp->is_success) {
                     my $activations_data = decode_json($activations_resp->decoded_content);
 
-                    # Search for active versions in staging and production
+                    # Sort activations to get the latest active versions for STAGING and PRODUCTION
                     my ($staging_version, $production_version);
-                    foreach my $activation (@{ $activations_data->{activations}->{items} }) {
-                        if ($activation->{network} eq 'STAGING' && $activation->{status} eq 'ACTIVE') {
+                    foreach my $activation (sort { $b->{propertyVersion} <=> $a->{propertyVersion} } @{ $activations_data->{activations}->{items} }) {
+                        if (!defined $staging_version && $activation->{network} eq 'STAGING' && $activation->{status} eq 'ACTIVE') {
                             $staging_version = $activation->{propertyVersion};
                         }
-                        if ($activation->{network} eq 'PRODUCTION' && $activation->{status} eq 'ACTIVE') {
+                        if (!defined $production_version && $activation->{network} eq 'PRODUCTION' && $activation->{status} eq 'ACTIVE') {
                             $production_version = $activation->{propertyVersion};
                         }
                     }
 
-                    # Retrieve and save staging version details
+                    # If no active version found, skip to the next property
+                    unless (defined $staging_version || defined $production_version) {
+                        warn "No active version found for property ($property_name) - Skipping\n";
+                        next;
+                    }
+
+                    # Retrieve and save staging version details if an active version is found
                     if (defined $staging_version) {
                         my $staging_rules_endpoint = "$baseurl/papi/v1/properties/$property_id/versions/$staging_version/rules?contractId=$contract_id&groupId=$group_id";
                         my $staging_rules_resp = $agent->get($staging_rules_endpoint);
@@ -85,7 +91,7 @@ foreach my $contract_id (@contract_ids) {
                         }
                     }
 
-                    # Retrieve and save production version details
+                    # Retrieve and save production version details if an active version is found
                     if (defined $production_version) {
                         my $production_rules_endpoint = "$baseurl/papi/v1/properties/$property_id/versions/$production_version/rules?contractId=$contract_id&groupId=$group_id";
                         my $production_rules_resp = $agent->get($production_rules_endpoint);
