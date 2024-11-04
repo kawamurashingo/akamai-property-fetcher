@@ -16,7 +16,7 @@ my $agent = Akamai::Edgegrid->new(
 my $baseurl = "https://" . $agent->{host};
 
 # Set the number of parallel processes
-my $max_processes = 10;  # Adjust this number based on your system's capacity
+my $max_processes = 4;  # Adjust this number based on your system's capacity
 my $pm = Parallel::ForkManager->new($max_processes);
 
 # Endpoint to retrieve contract IDs
