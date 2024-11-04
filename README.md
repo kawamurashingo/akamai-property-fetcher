@@ -23,6 +23,19 @@ cpan install Akamai::Edgegrid JSON File::Spec File::Path
 ```
 
 ## Setup
+Authentication
+
+We provide authentication credentials through an API client. Requests to the API are signed with a timestamp and are executed immediately.
+
+    Create authentication credentials[https://techdocs.akamai.com/developer/docs/set-up-authentication-credentials]
+
+    Place your credentials in an EdgeGrid resource file, .edgerc, under a heading of [default] at your local home directory or the home directory of a web-server user.
+
+    [default]
+    client_secret = C113nt53KR3TN6N90yVuAgICxIRwsObLi0E67/N8eRN=
+    host = akab-h05tnam3wl42son7nktnlnnx-kbob3i3v.luna.akamaiapis.net
+    access_token = akab-acc35t0k3nodujqunph3w7hzp7-gtm6ij
+    client_token = akab-c113ntt0k3n4qtari252bfxxbsl-yvsdj
 
 1. **Configure .edgerc File**:
    - The script requires an `.edgerc` file in your home directory (`$HOME/.edgerc`) with the necessary Akamai API credentials.
