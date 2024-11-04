@@ -29,10 +29,10 @@ cpan install Akamai::Edgegrid JSON File::Spec File::Path
    - Ensure the `.edgerc` file has a section `[default]` with the required access information (host, client_secret, client_token, access_token).
    ```
    [default]
-   client_secret = C113nt53KR3TN6N90yVuAgICxIRwsObLi0E67/N8eRN=
-   host = akab-h05tnam3wl42son7nktnlnnx-kbob3i3v.luna.akamaiapis.net
-   access_token = akab-acc35t0k3nodujqunph3w7hzp7-gtm6ij
-   client_token = akab-c113ntt0k3n4qtari252bfxxbsl-yvsdj
+   client_secret = C113nt53KR3TN6N90yVuAxxxxxxxxx/N8eRN=
+   host = akab-h0xxxxxxxxxxxxxob3i3v.luna.akamaiapis.net
+   access_token = akab-acc35t0k3nodujxxxxxxxxxxxxxxxxxxx
+   client_token = akab-c113ntt0k3n4qtxxxxxxxxxxxxxxxxxxx
    ```
 3. **Clone the Repository**:
    ```bash
