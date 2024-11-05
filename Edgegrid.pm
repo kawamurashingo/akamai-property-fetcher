@@ -70,6 +70,7 @@ sub _padded_sha256_base64 {
 }
 
 ## methods
+
 sub _debug {
     my ($self, $msg) = @_;
     if ($self->{debug}) {
