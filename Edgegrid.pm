@@ -69,6 +69,7 @@ sub _padded_sha256_base64 {
     return _pad_digest(sha256_base64($data));
 }
 
+## methods
 sub _debug {
     my ($self, $msg) = @_;
     if ($self->{debug}) {
