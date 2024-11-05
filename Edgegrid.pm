@@ -50,6 +50,7 @@ sub _new_nonce {
     return $ug->create_str;
 }
 
+# see http://search.cpan.org/~mshelor/Digest-SHA-5.88/lib/Digest/SHA.pm#PADDING_OF_BASE64_DIGESTS
 sub _pad_digest {
     my $digest = shift;
     while (length($digest) % 4) {
