@@ -280,7 +280,6 @@ sub new {
 
 =back
 
-
 =head1 BUGS
 
 Please report any bugs or feature requests to the web interface at L<https://github.com/akamai-open/edgegrid-perl/issues>.  
