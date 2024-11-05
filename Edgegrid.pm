@@ -200,6 +200,7 @@ The following optional key/value pairs may be provided:
     debug           if true enables additional logging
     headers_to_sign listref of header names to sign (in order) (default [])
     max_body        maximum body size for POSTS (default 2048)
+
 =cut
 
 sub new {
