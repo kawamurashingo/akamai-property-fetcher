@@ -176,6 +176,26 @@ sub _make_auth_header {
     return $signed_auth_header;
 }
 
+=head1 CONSTRUCTOR METHOD
+=over 2
+=item $ua = Akamai::Edgegrid->new( %options )
+This method constructs a new C<Akamai::EdgeGrid> object and returns it.  This
+is a subclass of C<LWP::UserAgent> and accepts all Key/value pair arguments
+accepted by the parent class.  In addition The following required key/value
+pairs must be provided:
+    KEY           SOURCE
+    ------------- -----------------------------------------------
+    client_token  from "Credentials" section of Manage APIs UI
+    client_secret from "Credentials" section of Manage APIs UI
+    access_token  from "Authorizations" section of Manage APIs UI
+The following optional key/value pairs may be provided:
+    KEY             DESCRIPTION
+    --------------- -------------------------------------------------------
+    debug           if true enables additional logging
+    headers_to_sign listref of header names to sign (in order) (default [])
+    max_body        maximum body size for POSTS (default 2048)
+=cut
+
 sub new {
     my $class = shift @_;
     my %args = @_;
