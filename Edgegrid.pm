@@ -17,7 +17,7 @@ Akamai::Edgegrid - User agent for Akamai {OPEN} Edgegrid
 
 =head1 VERSION
 
-Version 1.0
+Version 1.0.5
 
 =cut
 
@@ -50,7 +50,6 @@ sub _new_nonce {
     return $ug->create_str;
 }
 
-# see http://search.cpan.org/~mshelor/Digest-SHA-5.88/lib/Digest/SHA.pm#PADDING_OF_BASE64_DIGESTS
 sub _pad_digest {
     my $digest = shift;
     while (length($digest) % 4) {
@@ -68,8 +67,6 @@ sub _padded_sha256_base64 {
     my ($data) = @_;
     return _pad_digest(sha256_base64($data));
 }
-
-## methods
 
 sub _debug {
     my ($self, $msg) = @_;
@@ -176,38 +173,11 @@ sub _make_auth_header {
     return $signed_auth_header;
 }
 
-=head1 CONSTRUCTOR METHOD
-
-=over 2
-
-=item $ua = Akamai::Edgegrid->new( %options )
-
-This method constructs a new C<Akamai::EdgeGrid> object and returns it.  This
-is a subclass of C<LWP::UserAgent> and accepts all Key/value pair arguments
-accepted by the parent class.  In addition The following required key/value
-pairs must be provided:
-
-    KEY           SOURCE
-    ------------- -----------------------------------------------
-    client_token  from "Credentials" section of Manage APIs UI
-    client_secret from "Credentials" section of Manage APIs UI
-    access_token  from "Authorizations" section of Manage APIs UI
-
-The following optional key/value pairs may be provided:
-
-    KEY             DESCRIPTION
-    --------------- -------------------------------------------------------
-    debug           if true enables additional logging
-    headers_to_sign listref of header names to sign (in order) (default [])
-    max_body        maximum body size for POSTS (default 2048)
-
-=cut
-
 sub new {
     my $class = shift @_;
     my %args = @_;
 
-    my @local_args = qw(config_file section client_token client_secret access_token headers_to_sign max_body debug);
+    my @local_args = qw(config_file section client_token client_secret access_token headers_to_sign max_body debug proxy);
     my @required_args = qw(client_token client_secret access_token);
     my @cred_args = qw(client_token client_secret access_token host);
     my %local = ();
@@ -231,7 +201,7 @@ sub new {
         for my $variable (@cred_args) {
             if ($cfg->val($self->{section}, $variable)) {
                 $self->{$variable} = $cfg->val($self->{section}, $variable);
-		$self->{$variable} =~ s/\s*//;
+                $self->{$variable} =~ s/\s*//;
             } else {
                 die ("Config file " .  $self->{config_file} .
                     " is missing required argument " . $variable .
@@ -241,10 +211,15 @@ sub new {
         if ( $cfg->val($self->{section}, "max_body") ) {
             $self->{max_body} = $cfg->val($self->{section}, "max_body");
         }
+
+        # Optional proxy setting from config
+        if ($cfg->val($self->{section}, "proxy")) {
+            $self->{proxy} = $cfg->val($self->{section}, "proxy");
+        }
     }
 
     for my $arg (@required_args) {
-    unless ($self->{$arg}) {
+        unless ($self->{$arg}) {
             die "missing required argument $arg";
         }
     }
@@ -254,6 +229,11 @@ sub new {
     }
     unless ($self->{max_body}) {
         $self->{max_body} = 131072;
+    }
+
+    # Apply proxy settings if provided and not empty
+    if ($self->{proxy} && $self->{proxy} ne '') {
+        $self->proxy(['http', 'https'], $self->{proxy});
     }
 
     $self->add_handler('request_prepare' => sub {
@@ -267,46 +247,5 @@ sub new {
 
     return $self;
 }
-
-=back
-
-=head1 BUGS
-
-Please report any bugs or feature requests to the web interface at L<https://github.com/akamai-open/edgegrid-perl/issues>.  
-
-=head1 SUPPORT
-
-You can find documentation for this module with the perldoc command.
-
-    perldoc Akamai::Edgegrid
-
-
-You can also look for information at: 
-
-=over 4
-
-=item * Akamai's OPEN Developer Community
-
-L<https://developer.akamai.com>
-
-=item * Github issues (report bugs here)
-
-L<https://github.com/akamai-open/AkamaiOPEN-edgegrid-perl/issues>
-
-=item * AnnoCPAN: Annotated CPAN documentation
-
-L<http://annocpan.org/dist/edgegrid-perl>
-
-=item * CPAN Ratings
-
-L<http://cpanratings.perl.org/d/edgegrid-perl>
-
-=item * Search CPAN
-
-L<http://search.cpan.org/dist/edgegrid-perl/>
-
-=back
-
-=cut
 
 1; # End of Akamai::Edgegrid
