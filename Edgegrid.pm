@@ -17,7 +17,7 @@ Akamai::Edgegrid - User agent for Akamai {OPEN} Edgegrid
 
 =head1 VERSION
 
-Version 1.0
+Version 1.0.5
 
 =cut
 
@@ -207,7 +207,7 @@ sub new {
     my $class = shift @_;
     my %args = @_;
 
-    my @local_args = qw(config_file section client_token client_secret access_token headers_to_sign max_body debug);
+    my @local_args = qw(config_file section client_token client_secret access_token headers_to_sign max_body debug proxy);
     my @required_args = qw(client_token client_secret access_token);
     my @cred_args = qw(client_token client_secret access_token host);
     my %local = ();
@@ -231,7 +231,7 @@ sub new {
         for my $variable (@cred_args) {
             if ($cfg->val($self->{section}, $variable)) {
                 $self->{$variable} = $cfg->val($self->{section}, $variable);
-		$self->{$variable} =~ s/\s*//;
+                $self->{$variable} =~ s/\s*//;
             } else {
                 die ("Config file " .  $self->{config_file} .
                     " is missing required argument " . $variable .
@@ -241,10 +241,15 @@ sub new {
         if ( $cfg->val($self->{section}, "max_body") ) {
             $self->{max_body} = $cfg->val($self->{section}, "max_body");
         }
+
+        # Optional proxy setting from config
+        if ($cfg->val($self->{section}, "proxy")) {
+            $self->{proxy} = $cfg->val($self->{section}, "proxy");
+        }
     }
 
     for my $arg (@required_args) {
-    unless ($self->{$arg}) {
+        unless ($self->{$arg}) {
             die "missing required argument $arg";
         }
     }
@@ -254,6 +259,11 @@ sub new {
     }
     unless ($self->{max_body}) {
         $self->{max_body} = 131072;
+    }
+
+    # Apply proxy settings if provided and not empty
+    if ($self->{proxy} && $self->{proxy} ne '') {
+        $self->proxy(['http', 'https'], $self->{proxy});
     }
 
     $self->add_handler('request_prepare' => sub {
