@@ -177,8 +177,11 @@ sub _make_auth_header {
 }
 
 =head1 CONSTRUCTOR METHOD
+
 =over 2
+
 =item $ua = Akamai::Edgegrid->new( %options )
+
 This method constructs a new C<Akamai::EdgeGrid> object and returns it.  This
 is a subclass of C<LWP::UserAgent> and accepts all Key/value pair arguments
 accepted by the parent class.  In addition The following required key/value
