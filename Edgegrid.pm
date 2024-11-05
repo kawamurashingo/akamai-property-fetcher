@@ -186,12 +186,15 @@ This method constructs a new C<Akamai::EdgeGrid> object and returns it.  This
 is a subclass of C<LWP::UserAgent> and accepts all Key/value pair arguments
 accepted by the parent class.  In addition The following required key/value
 pairs must be provided:
+
     KEY           SOURCE
     ------------- -----------------------------------------------
     client_token  from "Credentials" section of Manage APIs UI
     client_secret from "Credentials" section of Manage APIs UI
     access_token  from "Authorizations" section of Manage APIs UI
+
 The following optional key/value pairs may be provided:
+
     KEY             DESCRIPTION
     --------------- -------------------------------------------------------
     debug           if true enables additional logging
