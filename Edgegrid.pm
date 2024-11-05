@@ -278,4 +278,44 @@ sub new {
     return $self;
 }
 
+=back
+
+=head1 BUGS
+
+Please report any bugs or feature requests to the web interface at L<https://github.com/akamai-open/edgegrid-perl/issues>.  
+
+=head1 SUPPORT
+
+You can find documentation for this module with the perldoc command.
+
+    perldoc Akamai::Edgegrid
+
+You can also look for information at: 
+
+=over 4
+
+=item * Akamai's OPEN Developer Community
+
+L<https://developer.akamai.com>
+
+=item * Github issues (report bugs here)
+
+L<https://github.com/akamai-open/AkamaiOPEN-edgegrid-perl/issues>
+
+=item * AnnoCPAN: Annotated CPAN documentation
+
+L<http://annocpan.org/dist/edgegrid-perl>
+
+=item * CPAN Ratings
+
+L<http://cpanratings.perl.org/d/edgegrid-perl>
+
+=item * Search CPAN
+
+L<http://search.cpan.org/dist/edgegrid-perl/>
+
+=back
+
+=cut
+
 1; # End of Akamai::Edgegrid
