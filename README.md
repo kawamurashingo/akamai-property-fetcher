@@ -33,6 +33,8 @@ sudo cpan install Akamai::Edgegrid JSON File::Spec File::Path LWP::Protocol::htt
    host = akab-h0xxxxxxxxxxxxxob3i3v.luna.akamaiapis.net
    access_token = akab-acc35t0k3nodujxxxxxxxxxxxxxxxxxxx
    client_token = akab-c113ntt0k3n4qtxxxxxxxxxxxxxxxxxxx
+
+   proxy = http://proxy.example.com:8080 
    ```
 3. **Clone the Repository**:
    ```bash
